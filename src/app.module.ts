@@ -4,7 +4,8 @@ import { AppService } from './app.service'
 import { SearchModule } from './search/search.module'
 import { ConfigModule } from '@nestjs/config'
 import { DatabaseModule } from './database/database.module'
-import Joi from '@hapi/joi'
+import { PostsModule } from './posts/posts.module'
+import * as Joi from '@hapi/joi'
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import Joi from '@hapi/joi'
     }),
     SearchModule,
     DatabaseModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
