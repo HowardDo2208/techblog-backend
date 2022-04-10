@@ -13,6 +13,10 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch'
           username: configService.get('ELASTICSEARCH_USERNAME'),
           password: configService.get('ELASTICSEARCH_PASSWORD'),
         },
+        tls: {
+          rejectUnauthorized: false,
+          ca: configService.get('ELASTICSEARCH_CA'),
+        },
       }),
       inject: [ConfigService],
     }),

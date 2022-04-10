@@ -5,19 +5,13 @@ import { SearchModule } from './search/search.module'
 import { ConfigModule } from '@nestjs/config'
 import { DatabaseModule } from './database/database.module'
 import { PostsModule } from './posts/posts.module'
-import * as Joi from '@hapi/joi'
+
+const ENV = process.env.NODE_ENV
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      validationSchema: Joi.object({
-        POSTGRES_HOST: Joi.string().required(),
-        POSTGRES_PORT: Joi.number().required(),
-        POSTGRES_USER: Joi.string().required(),
-        POSTGRES_PASSWORD: Joi.string().required(),
-        POSTGRES_DB: Joi.string().required(),
-        PORT: Joi.number(),
-      }),
+      envFilePath: !ENV ? '.env' : `.env.${ENV}`,
     }),
     SearchModule,
     DatabaseModule,
