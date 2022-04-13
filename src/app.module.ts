@@ -5,6 +5,7 @@ import { SearchModule } from './search/search.module'
 import { ConfigModule } from '@nestjs/config'
 import { DatabaseModule } from './database/database.module'
 import { PostsModule } from './posts/posts.module'
+import { UsersModule } from './users/users.module';
 
 const ENV = process.env.NODE_ENV
 
@@ -16,6 +17,7 @@ const ENV = process.env.NODE_ENV
     SearchModule,
     DatabaseModule,
     PostsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
