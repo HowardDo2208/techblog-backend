@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module'
 import { PostsModule } from './posts/posts.module'
 import { UsersModule } from './users/users.module';
 import { PostCommentsModule } from './post-comments/post-comments.module';
+import { CategoryModule } from './category/category.module';
 
 const ENV = process.env.NODE_ENV
 
@@ -20,6 +21,7 @@ const ENV = process.env.NODE_ENV
     PostsModule,
     UsersModule,
     PostCommentsModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

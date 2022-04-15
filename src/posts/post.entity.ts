@@ -1,8 +1,11 @@
 import { PostComment } from 'src/post-comments/entities/post-comment.entity'
 import { User } from 'src/users/entities/user.entity'
+import { JoinTable } from 'typeorm'
+import { Category } from '../category/entities/category.entity'
 import {
   Column,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -46,4 +49,8 @@ export class Post {
 
   @OneToMany(() => PostComment, (comment) => comment.post)
   public comments: PostComment[]
+
+  @ManyToMany(() => Category, (category) => category.posts)
+  @JoinTable()
+  public categories: Category[]
 }
