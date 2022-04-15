@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config'
 import { DatabaseModule } from './database/database.module'
 import { PostsModule } from './posts/posts.module'
 import { UsersModule } from './users/users.module';
+import { PostCommentsModule } from './post-comments/post-comments.module';
 
 const ENV = process.env.NODE_ENV
 
@@ -18,6 +19,7 @@ const ENV = process.env.NODE_ENV
     DatabaseModule,
     PostsModule,
     UsersModule,
+    PostCommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

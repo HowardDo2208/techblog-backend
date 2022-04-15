@@ -1,22 +1,42 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Post } from 'src/posts/post.entity'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { PostComment } from '../../post-comments/entities/post-comment.entity'
 
 @Entity()
-class User {
+export class User {
   @PrimaryGeneratedColumn()
   public id: number
 
   @Column()
-  public name: string
+  public firstName: string
+
+  @Column()
+  public lastName: string
+
+  @Column()
+  public mobile: string
 
   @Column()
   public email: string
 
   @Column()
-  public password: string
+  public passwordHash: string
+
+  @Column()
+  public registeredAt: Date
+
+  @Column()
+  public lastLoginAt: Date
+
+  @Column()
+  public intro: string
+
+  @Column()
+  public profile: string
+
+  @OneToMany(() => Post, (post) => post.author)
+  public posts: Post[]
+
+  @OneToMany(() => PostComment, (comment) => comment.commenter)
+  public comments: PostComment[]
 }
-
-export default User
-
-
-
-// export class User {}
