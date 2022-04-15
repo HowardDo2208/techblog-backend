@@ -11,6 +11,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
+import { Tag } from 'src/tag/entities/tag.entity'
 
 @Entity()
 export class Post {
@@ -53,4 +54,8 @@ export class Post {
   @ManyToMany(() => Category, (category) => category.posts)
   @JoinTable()
   public categories: Category[]
+
+  @ManyToMany(() => Tag, (tag) => tag.posts)
+  @JoinTable()
+  public tags: Tag[]
 }
