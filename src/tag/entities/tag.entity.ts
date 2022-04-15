@@ -1,12 +1,14 @@
 import { Post } from 'src/posts/post.entity'
 import {
   Column,
+  Entity,
   JoinColumn,
   JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
+@Entity()
 export class Tag {
   @PrimaryGeneratedColumn()
   public id: number

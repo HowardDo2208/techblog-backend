@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import Post from './post.entity'
+import { Post } from './post.entity'
 import { PostSearchBody } from './post.types'
 
 @Injectable()
@@ -10,12 +10,15 @@ export default class PostsSearchService {
   constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
   async indexPost(post: Post) {
+    const { author, categories, tags, parent, ...rest } = post
     return this.elasticsearchService.index<PostSearchBody>({
       index: this.index,
       document: {
-        id: post.id,
-        title: post.title,
-        content: post.content,
+        ...rest,
+        author: author.firstName + ' ' + author.lastName,
+        categories: categories.map((category) => category.title),
+        tags: tags.map((tag) => tag.title),
+        parent: parent.title,
       },
     })
   }
@@ -27,7 +30,17 @@ export default class PostsSearchService {
         query: {
           multi_match: {
             query: text,
-            fields: ['title', 'content'],
+            fields: [
+              'title',
+              'metaTitle',
+              'slug',
+              'summary',
+              'content',
+              'author',
+              'parent',
+              'categories',
+              'tags',
+            ],
           },
         },
       },

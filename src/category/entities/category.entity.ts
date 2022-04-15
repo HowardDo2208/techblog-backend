@@ -1,6 +1,13 @@
 import { Post } from 'src/posts/post.entity'
-import { Column, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
 
+@Entity()
 export class Category {
   @PrimaryGeneratedColumn()
   public id: number

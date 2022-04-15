@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
-import User from './entities/user.entity'
+import { User } from './entities/user.entity'
 import { UserSearchBody } from './entities/user.types'
+import _ from 'lodash'
 
 @Injectable()
 export default class UsersSearchService {
@@ -12,12 +13,14 @@ export default class UsersSearchService {
   async indexUser(user: User) {
     return this.elasticsearchService.index<UserSearchBody>({
       index: this.index,
-      document: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        password : user.password,
-      },
+      document: _.pick(user, [
+        'id',
+        'firstName',
+        'lastName',
+        'email',
+        'mobile',
+        'intro',
+      ]),
     })
   }
 
@@ -28,7 +31,7 @@ export default class UsersSearchService {
         query: {
           multi_match: {
             query: text,
-            fields: ['email', 'password'],
+            fields: ['firstName', 'lastName', 'email', 'mobile', 'intro'],
           },
         },
       },

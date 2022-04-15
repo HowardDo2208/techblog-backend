@@ -1,7 +1,14 @@
 import { Post } from 'src/posts/post.entity'
 import { User } from 'src/users/entities/user.entity'
-import { PrimaryGeneratedColumn, ManyToOne, Column, OneToMany } from 'typeorm'
+import {
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  Column,
+  OneToMany,
+  Entity,
+} from 'typeorm'
 
+@Entity()
 export class PostComment {
   @PrimaryGeneratedColumn()
   public id: number

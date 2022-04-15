@@ -1,30 +1,36 @@
 export class CreateUserDto {
-    id?: number
-    name: string
-    email: string
-    password: string
+  id?: number
+  firstName: string
+  lastName: string
+  mobile?: string
+  email: string
+  password: string
+}
+
+export class UpdateUserDto {
+  firstName?: string
+  lastName?: string
+  mobile?: string
+  intro?: string
+  profile?: string
+  password?: string
+}
+
+export interface UserSearchBody {
+  id: number
+  firstName: string
+  lastName: string
+  email: string
+  mobile?: string
+  intro?: string
+  posts: string[]
+}
+
+export interface UserSearchResult {
+  hits: {
+    total: number
+    hits: Array<{
+      _source: UserSearchBody
+    }>
   }
-  
-  export class UpdateUserDto {
-    
-    name?: string
-    email?: string
-    password?: string
-  }
-  
-  export interface UserSearchBody {
-    id: number
-    name: string
-    email: string
-    password: string
-  }
-  
-  export interface UserSearchResult {
-    hits: {
-      total: number
-      hits: Array<{
-        _source: UserSearchBody
-      }>
-    }
-  }
-  
+}

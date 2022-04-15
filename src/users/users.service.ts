@@ -3,10 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 // import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
-import  User  from './entities/user.entity';
-import UsersSearchService from './usersSearch.service';
-import { CreateUserDto, UpdateUserDto } from './entities/user.types';
-
+import { User } from './entities/user.entity'
+import UsersSearchService from './usersSearch.service'
+import { CreateUserDto, UpdateUserDto } from './entities/user.types'
 
 @Injectable()
 export class UsersService {
@@ -38,19 +37,6 @@ export class UsersService {
     return this.userRepository.delete(id)
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @Injectable()
 // export class UsersService {
