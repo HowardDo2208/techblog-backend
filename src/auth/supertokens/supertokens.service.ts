@@ -2,17 +2,23 @@ import { Inject, Injectable } from '@nestjs/common'
 import supertokens from 'supertokens-node'
 import Session from 'supertokens-node/recipe/session'
 import ThirdParty from 'supertokens-node/recipe/thirdparty'
-
-import { ConfigInjectionToken, AuthModuleConfig } from '../config.interface'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class SupertokensService {
-  constructor(@Inject(ConfigInjectionToken) private config: AuthModuleConfig) {
+  constructor(private configService: ConfigService) {
+    const appInfo = {
+      appName: configService.get('APP_NAME'),
+      websiteDomain: configService.get('WEBSITE_DOMAIN'),
+      websiteBasePath: '/auth',
+      apiDomain: configService.get('API_DOMAIN'),
+      apiBasePath: '/auth',
+    }
     supertokens.init({
-      appInfo: config.appInfo,
+      appInfo,
       supertokens: {
-        connectionURI: config.connectionURI,
-        apiKey: config.apiKey,
+        connectionURI: configService.get('SUPERTOKENS_CONNECTION_URI'),
+        apiKey: configService.get('SUPERTOKENS_API_KEY'),
       },
       recipeList: [
         ThirdParty.init({
