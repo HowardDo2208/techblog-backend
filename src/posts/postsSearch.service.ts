@@ -15,10 +15,12 @@ export default class PostsSearchService {
       index: this.index,
       document: {
         ...rest,
-        author: author.firstName + ' ' + author.lastName,
-        categories: categories.map((category) => category.title),
-        tags: tags.map((tag) => tag.title),
-        parent: parent.title,
+        author: author ? author.firstName + ' ' + author.lastName : '',
+        categories: categories
+          ? categories.map((category) => category.title)
+          : [],
+        tags: tags ? tags.map((tag) => tag.title) : [],
+        parent: parent ? parent.title : '',
       },
     })
   }

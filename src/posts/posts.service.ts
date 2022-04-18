@@ -37,8 +37,10 @@ export class PostsService {
       tagIds,
     } = post
 
-    const categories = await this.categoryRepository.findByIds(categoryIds)
-    const tags = await this.categoryRepository.findByIds(tagIds)
+    const categories = categoryIds
+      ? await this.categoryRepository.findByIds(categoryIds)
+      : []
+    const tags = tagIds ? await this.categoryRepository.findByIds(tagIds) : []
 
     const newPost = this.postRepository.create({
       parent: parentId ? await this.postRepository.findOne(parentId) : null,
