@@ -11,9 +11,7 @@ import { CategoryModule } from './category/category.module'
 import { TagModule } from './tag/tag.module'
 import { AuthModule } from './auth/auth.module'
 
-const ENV = 'production'
-// process.env.NODE_ENV
-
+const ENV = process.env.NODE_ENV
 @Module({
   imports: [
     ConfigModule.forRoot({
