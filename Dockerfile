@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+CMD ["npm", "start:dev"]
 
 FROM node:16.14.2-alpine as production
 
@@ -23,6 +23,4 @@ RUN npm install --production
 
 COPY . .
 
-COPY --from=development /usr/src/app/dist ./dist
-
-CMD ["node", "dist/main"]
+CMD ["npm", "run", "start:prod"]
