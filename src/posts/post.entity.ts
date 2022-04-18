@@ -30,19 +30,27 @@ export class Post {
   @Column()
   public title: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   public metaTitle: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   public slug: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   public summary: string
 
   @Column()
   public published: boolean
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   public publishedAt: Date
 
   @Column()

@@ -9,9 +9,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const configService = app.get(ConfigService)
   app.enableCors({
-    origin: [configService.get('WEBSITE_DOMAIN')],
+    origin: [
+      // 'http://localhost:3080',
+      configService.get('WEBSITE_DOMAIN'),
+    ],
     allowedHeaders: ['content-type', ...supertokens.getAllCORSHeaders()],
     credentials: true,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   })
 
   app.useGlobalFilters(new SupertokensExceptionFilter())

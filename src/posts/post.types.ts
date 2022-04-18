@@ -6,8 +6,8 @@ export class CreatePostDto {
   summary: string
   published: boolean
   content: string
-  categoryIds: number[]
-  tagIds: number[]
+  categoryIds?: number[]
+  tagIds?: number[]
 }
 
 export class UpdatePostDto {
