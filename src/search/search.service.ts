@@ -9,7 +9,6 @@ export class SearchService {
 
   async search({ query }: SearchBody) {
     const { hits } = await this.elasticsearchService.search<SearchBody>({
-      index: 'users',
       body: {
         query: {
           multi_match: {
