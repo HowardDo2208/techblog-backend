@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Body, Controller, Get, Post, Query } from '@nestjs/common'
 import { SearchService } from './search.service'
 import { SearchBody } from './search.types'
 
@@ -6,8 +6,8 @@ import { SearchBody } from './search.types'
 export class SearchController {
   constructor(private readonly searchService: SearchService) {}
 
-  @Post()
-  async search(@Body() body: SearchBody) {
-    return await this.searchService.search(body)
+  @Get()
+  async search(@Query() { _q }: SearchBody) {
+    return await this.searchService.search({ _q })
   }
 }

@@ -1,3 +1,3 @@
 export interface SearchBody {
-  query: string
+  _q: string
 }

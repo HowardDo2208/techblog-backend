@@ -7,12 +7,12 @@ import * as _ from 'lodash'
 export class SearchService {
   constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
-  async search({ query }: SearchBody) {
+  async search({ _q }: SearchBody) {
     const { hits } = await this.elasticsearchService.search<SearchBody>({
       body: {
         query: {
           multi_match: {
-            query,
+            query: _q,
           },
         },
       },
