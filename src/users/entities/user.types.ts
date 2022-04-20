@@ -1,10 +1,6 @@
 export class CreateUserDto {
-  id?: number
-  firstName: string
-  lastName: string
-  mobile?: string
+  id: string
   email: string
-  password: string
 }
 
 export class UpdateUserDto {
@@ -17,13 +13,13 @@ export class UpdateUserDto {
 }
 
 export interface UserSearchBody {
-  id: number
-  firstName: string
-  lastName: string
+  id: string
+  firstName?: string
+  lastName?: string
   email: string
   mobile?: string
   intro?: string
-  posts: string[]
+  posts?: string[]
 }
 
 export interface UserSearchResult {

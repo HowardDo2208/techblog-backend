@@ -53,7 +53,6 @@ services:
 
   es01:
     container_name: elastic-1
-    restart: always
     depends_on:
       setup:
         condition: service_healthy
@@ -98,7 +97,6 @@ services:
 
   kibana:
     container_name: kibana
-    restart: always
     depends_on:
       es01:
         condition: service_healthy
@@ -127,7 +125,6 @@ services:
 
   posgres:
     container_name: postgres
-    restart: always
     image: postgres:${POSTGRES_VERSION}
     volumes:
       - postgresdata:/var/lib/postgresql/data

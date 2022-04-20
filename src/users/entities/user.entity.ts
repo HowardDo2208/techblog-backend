@@ -1,37 +1,54 @@
 import { Post } from 'src/posts/post.entity'
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
 import { PostComment } from '../../post-comments/entities/post-comment.entity'
 
-@Entity()
+@Entity({ name: 'user_account' })
 export class User {
-  @PrimaryGeneratedColumn()
-  public id: number
+  @PrimaryColumn()
+  public id: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   public firstName: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   public lastName: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   public mobile: string
 
   @Column()
   public email: string
 
-  @Column()
-  public passwordHash: string
-
-  @Column()
+  @Column({
+    nullable: true,
+  })
   public registeredAt: Date
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   public lastLoginAt: Date
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   public intro: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   public profile: string
 
   @OneToMany(() => Post, (post) => post.author)

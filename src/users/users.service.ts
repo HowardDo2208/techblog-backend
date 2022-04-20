@@ -5,7 +5,11 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 // import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity'
 import UsersSearchService from './usersSearch.service'
-import { CreateUserDto, UpdateUserDto } from './entities/user.types'
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  UserSearchBody,
+} from './entities/user.types'
 
 @Injectable()
 export class UsersService {
@@ -24,39 +28,29 @@ export class UsersService {
   }
 
   async create(user: CreateUserDto): Promise<User> {
-    const result = await this.userRepository.save(user)
-    this.userSearchService.indexUser(result)
+    const newUser = await this.userRepository.create({
+      ...user,
+      registeredAt: new Date(),
+    })
+    const result = await this.userRepository.save(newUser)
+    await this.userSearchService.indexUser(result)
     return result
   }
 
   update(id: number, user: UpdateUserDto): Promise<UpdateResult> {
-    return this.userRepository.update(id, user)
+    const result = this.userRepository.update(id, user)
+    //update elasticsearch document
+    return result
   }
 
   delete(id: number): Promise<DeleteResult> {
-    return this.userRepository.delete(id)
+    const result = this.userRepository.delete(id)
+    //delete elasticsearch index document
+    return result
+  }
+
+  async search(text: string): Promise<UserSearchBody[]> {
+    const result = await this.userSearchService.searchUser(text)
+    return result
   }
 }
-
-// @Injectable()
-// export class UsersService {
-//   create(createUserDto: CreateUserDto) {
-//     return 'This action adds a new user';
-//   }
-
-//   findAll() {
-//     return `This action returns all users`;
-//   }
-
-//   findOne(id: number) {
-//     return `This action returns a #${id} user`;
-//   }
-
-//   update(id: number, updateUserDto: UpdateUserDto) {
-//     return `This action updates a #${id} user`;
-//   }
-
-//   remove(id: number) {
-//     return `This action removes a #${id} user`;
-//   }
-// }
