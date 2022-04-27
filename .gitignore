@@ -36,3 +36,5 @@ lerna-debug.log*
 
 .yarn
 .vscode
+.env
+.env.production
