@@ -20,11 +20,7 @@ export default class UsersSearchService {
       index: this.index,
       document: {
         id,
-        firstName,
-        lastName,
         email,
-        mobile,
-        intro,
       },
     })
   }
@@ -36,7 +32,7 @@ export default class UsersSearchService {
         query: {
           multi_match: {
             query: text,
-            fields: ['id', 'firstName', 'lastName', 'email', 'mobile', 'intro'],
+            // fields: ['id', 'firstName', 'lastName', 'email', 'mobile', 'intro'],
           },
         },
       },

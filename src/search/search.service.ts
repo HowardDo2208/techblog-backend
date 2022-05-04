@@ -25,4 +25,38 @@ export class SearchService {
       'index',
     )
   }
+
+  async searchPost({ _q }: SearchBody) {
+    const { hits } = await this.elasticsearchService.search<SearchBody>({
+      index: 'posts',
+      body: {
+        query: {
+          multi_match: {
+            query: _q,
+          },
+        },
+      },
+    })
+    return hits.hits.map((item) => ({
+      ...item._source,
+      index: item._index,
+    }))
+  }
+
+  async searchUser({ _q }: SearchBody) {
+    const { hits } = await this.elasticsearchService.search<SearchBody>({
+      index: 'users',
+      body: {
+        query: {
+          multi_match: {
+            query: _q,
+          },
+        },
+      },
+    })
+    return hits.hits.map((item) => ({
+      ...item._source,
+      index: item._index,
+    }))
+  }
 }

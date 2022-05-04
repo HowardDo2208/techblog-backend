@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common'
+import { Controller, Get, Query } from '@nestjs/common'
 import { SearchService } from './search.service'
 import { SearchBody } from './search.types'
 
@@ -9,5 +9,15 @@ export class SearchController {
   @Get()
   async search(@Query() { _q }: SearchBody) {
     return await this.searchService.search({ _q })
+  }
+
+  @Get('/posts')
+  async searchPosts(@Query() { _q }: SearchBody) {
+    return await this.searchService.searchPost({ _q })
+  }
+
+  @Get('/users')
+  async searchUsers(@Query() { _q }: SearchBody) {
+    return await this.searchService.searchUser({ _q })
   }
 }
