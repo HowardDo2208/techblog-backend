@@ -1,10 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common'
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service'
+import { UsersService } from 'src/users/users.service'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { Post } from './post.entity'
 import { CreatePostDto, UpdatePostDto } from './post.types'
 import PostsSearchService from './postsSearch.service'
-import { Category } from '../category/entities/category.entity'
 
 @Injectable()
 export class PostsService {
@@ -12,8 +18,8 @@ export class PostsService {
     @InjectRepository(Post) private postRepository: Repository<Post>,
     @Inject(PostsSearchService)
     private readonly postSearchService: PostsSearchService,
-    @InjectRepository(Category)
-    private categoryRepository: Repository<Category>,
+    private cloudinary: CloudinaryService,
+    private usersService: UsersService,
   ) {}
 
   findAll(): Promise<Post[]> {
@@ -26,32 +32,27 @@ export class PostsService {
 
   async create(post: CreatePostDto): Promise<Post> {
     const {
+      userId,
       parentId,
       title,
-      metaTitle,
-      slug,
-      summary,
-      published,
-      content,
-      categoryIds,
-      tagIds,
+      published = true,
+      body,
+      tags,
+      image,
     } = post
-
-    const categories = categoryIds
-      ? await this.categoryRepository.findByIds(categoryIds)
-      : []
-    const tags = tagIds ? await this.categoryRepository.findByIds(tagIds) : []
+    const uploadedImage = await this.cloudinary.uploadImage(image)
+    const author = await this.usersService.findOne(userId)
 
     const newPost = this.postRepository.create({
       parent: parentId ? await this.postRepository.findOne(parentId) : null,
       title,
-      metaTitle,
-      slug,
-      summary,
+      slug: post.title.toLowerCase().replace(/\s/g, '-'),
       published,
-      content,
-      categories,
-      tags,
+      body,
+      tags: JSON.parse(tags),
+      image: uploadedImage.url,
+      publishedAt: new Date(),
+      author,
     })
     const result = await this.postRepository.save(newPost)
     this.postSearchService.indexPost(result)
@@ -64,5 +65,9 @@ export class PostsService {
 
   delete(id: number): Promise<DeleteResult> {
     return this.postRepository.delete(id)
+  }
+
+  deleteAll(): Promise<DeleteResult> {
+    return this.postRepository.delete({})
   }
 }

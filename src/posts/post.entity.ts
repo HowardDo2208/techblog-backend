@@ -1,7 +1,5 @@
 import { PostComment } from 'src/post-comments/entities/post-comment.entity'
 import { User } from 'src/users/entities/user.entity'
-import { JoinTable } from 'typeorm'
-import { Category } from '../category/entities/category.entity'
 import {
   Column,
   Entity,
@@ -11,7 +9,6 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
-import { Tag } from 'src/tag/entities/tag.entity'
 
 @Entity()
 export class Post {
@@ -48,22 +45,20 @@ export class Post {
   @Column()
   public published: boolean
 
-  @Column({
+  @Column('timestamp', {
     nullable: true,
   })
   public publishedAt: Date
 
   @Column()
-  public content: string
+  public body: string
+
+  @Column('text', { array: true, default: [] })
+  public tags: string[]
+
+  @Column({ nullable: true })
+  public image: string
 
   @OneToMany(() => PostComment, (comment) => comment.post)
   public comments: PostComment[]
-
-  @ManyToMany(() => Category, (category) => category.posts)
-  @JoinTable()
-  public categories: Category[]
-
-  @ManyToMany(() => Tag, (tag) => tag.posts)
-  @JoinTable()
-  public tags: Tag[]
 }

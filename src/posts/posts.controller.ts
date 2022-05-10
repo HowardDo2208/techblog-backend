@@ -6,17 +6,38 @@ import {
   Param,
   Patch,
   Post,
+  Query,
+  Session,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { FormDataRequest } from 'nestjs-form-data'
+import { AuthGuard } from 'src/auth/auth.guard'
+import { SearchBody } from 'src/search/search.types'
+import { SessionContainer } from 'supertokens-node/recipe/session'
 import { CreatePostDto, UpdatePostDto } from './post.types'
 import { PostsService } from './posts.service'
+import PostsSearchService from './postsSearch.service'
 
 @Controller('posts')
 export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(
+    private readonly postsService: PostsService,
+    private readonly postsSearchService: PostsSearchService,
+  ) {}
 
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto)
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
+  create(
+    @Session() session: SessionContainer,
+    @UploadedFile() image,
+    @Body() createPostDto: CreatePostDto,
+  ) {
+    const userId = session.getUserId()
+    return this.postsService.create({ ...createPostDto, image, userId })
   }
 
   @Get()
@@ -24,18 +45,29 @@ export class PostsController {
     return this.postsService.findAll()
   }
 
+  @Get('/search')
+  search(@Query() { _q }: SearchBody) {
+    return this.postsSearchService.searchPosts(_q)
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id)
+  findOne(@Param('id') id: number) {
+    return this.postsService.findOne(id)
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+  update(@Param('id') id: number, @Body() updatePostDto: UpdatePostDto) {
     return this.postsService.update(+id, updatePostDto)
   }
 
+  @Delete('deleteAll')
+  removeAll() {
+    this.postsService.deleteAll()
+    this.postsSearchService.deleteAllDocs()
+  }
+
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postsService.delete(+id)
+  remove(@Param('id') id: number) {
+    return this.postsService.delete(id)
   }
 }

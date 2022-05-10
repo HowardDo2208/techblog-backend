@@ -1,25 +1,19 @@
 export class CreatePostDto {
   parentId?: number
   title: string
-  metaTitle?: string
-  slug?: string
-  summary: string
   published: boolean
-  content: string
-  categoryIds?: number[]
-  tagIds?: number[]
+  body: string
+  tags: string
+  image?: any
+  userId?: string
 }
 
 export class UpdatePostDto {
   parentId?: number
   title?: string
-  metaTitle?: string
-  slug?: string
-  summary?: string
   published?: boolean
-  content?: string
-  categoryIds?: number[]
-  tagIds?: number[]
+  body?: string
+  tags?: string[]
 }
 
 export interface PostSearchBody {
@@ -29,8 +23,7 @@ export interface PostSearchBody {
   slug: string
   summary: string
   tags: string[]
-  categories: string[]
-  content: string
+  body: string
   author: string
   parent?: string
   published: boolean

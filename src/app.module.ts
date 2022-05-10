@@ -7,9 +7,9 @@ import { DatabaseModule } from './database/database.module'
 import { PostsModule } from './posts/posts.module'
 import { UsersModule } from './users/users.module'
 import { PostCommentsModule } from './post-comments/post-comments.module'
-import { CategoryModule } from './category/category.module'
-import { TagModule } from './tag/tag.module'
 import { AuthModule } from './auth/auth.module'
+import { CloudinaryModule } from './cloudinary/cloudinary.module'
+import { NestjsFormDataModule } from 'nestjs-form-data'
 
 const ENV = process.env.NODE_ENV
 @Module({
@@ -24,9 +24,8 @@ const ENV = process.env.NODE_ENV
     PostsModule,
     UsersModule,
     PostCommentsModule,
-    CategoryModule,
-    TagModule,
     AuthModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

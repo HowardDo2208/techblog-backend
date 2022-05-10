@@ -8,11 +8,13 @@ export class SearchController {
 
   @Get()
   async search(@Query() { _q }: SearchBody) {
+    console.log('search này')
     return await this.searchService.search({ _q })
   }
 
   @Get('/posts')
   async searchPosts(@Query() { _q }: SearchBody) {
+    console.log('vao đây search module')
     return await this.searchService.searchPost({ _q })
   }
 

@@ -9,10 +9,7 @@ import { PostsService } from 'src/posts/posts.service'
 export default class UsersSearchService {
   index = 'users'
 
-  constructor(
-    private readonly elasticsearchService: ElasticsearchService,
-    private readonly postsService: PostsService,
-  ) {}
+  constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
   async indexUser(user: User) {
     const { id, firstName, lastName, email, mobile, intro } = user

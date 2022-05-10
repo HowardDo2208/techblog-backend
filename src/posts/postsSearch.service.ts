@@ -10,16 +10,16 @@ export default class PostsSearchService {
   constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
   async indexPost(post: Post) {
-    const { author, categories, tags, parent, ...rest } = post
+    const { author, tags, parent, body, ...rest } = post
     return this.elasticsearchService.index<PostSearchBody>({
       index: this.index,
       document: {
         ...rest,
-        author: author ? author.firstName + ' ' + author.lastName : '',
-        categories: categories
-          ? categories.map((category) => category.title)
-          : [],
-        tags: tags ? tags.map((tag) => tag.title) : [],
+        author: author
+          ? `${author.firstName} ${author.lastName} ${author.email}`
+          : '',
+        tags,
+        body,
         parent: parent ? parent.title : '',
       },
     })
@@ -40,7 +40,6 @@ export default class PostsSearchService {
               'content',
               'author',
               'parent',
-              'categories',
               'tags',
             ],
           },
@@ -48,5 +47,16 @@ export default class PostsSearchService {
       },
     })
     return hits.hits.map((item) => item._source)
+  }
+
+  async deleteAllDocs() {
+    return this.elasticsearchService.deleteByQuery({
+      index: this.index,
+      body: {
+        query: {
+          match_all: {},
+        },
+      },
+    })
   }
 }

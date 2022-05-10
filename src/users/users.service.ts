@@ -23,8 +23,9 @@ export class UsersService {
     return this.userRepository.find()
   }
 
-  findOne(id: number): Promise<User> {
-    return this.userRepository.findOne(id)
+  async findOne(id: string): Promise<User> {
+    const res = await this.userRepository.findOne(id)
+    return res
   }
 
   async create(user: CreateUserDto): Promise<User> {
@@ -37,13 +38,13 @@ export class UsersService {
     return result
   }
 
-  update(id: number, user: UpdateUserDto): Promise<UpdateResult> {
+  update(id: string, user: UpdateUserDto): Promise<UpdateResult> {
     const result = this.userRepository.update(id, user)
     //update elasticsearch document
     return result
   }
 
-  delete(id: number): Promise<DeleteResult> {
+  delete(id: string): Promise<DeleteResult> {
     const result = this.userRepository.delete(id)
     //delete elasticsearch index document
     return result

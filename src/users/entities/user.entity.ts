@@ -16,17 +16,17 @@ export class User {
   @Column({
     nullable: true,
   })
-  public firstName: string
+  public firstName?: string
 
   @Column({
     nullable: true,
   })
-  public lastName: string
+  public lastName?: string
 
   @Column({
     nullable: true,
   })
-  public mobile: string
+  public mobile?: string
 
   @Column()
   public email: string
