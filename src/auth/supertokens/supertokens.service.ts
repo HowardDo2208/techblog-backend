@@ -34,9 +34,8 @@ export class SupertokensService {
                 thirdPartySignInUp: async function (input) {
                   const result =
                     await originalImplementation.thirdPartySignInUp(input)
-                  console.log('result', result)
                   if (result.status === 'OK' && result.createdNewUser) {
-                    console.log('create on postgres')
+                    //create on database
                     const { id, email } = result.user
                     const postgresUser = await usersService.create({
                       id,

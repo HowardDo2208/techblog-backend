@@ -3,14 +3,7 @@ export class CreateUserDto {
   email: string
 }
 
-export class UpdateUserDto {
-  firstName?: string
-  lastName?: string
-  mobile?: string
-  intro?: string
-  profile?: string
-  password?: string
-}
+export class UpdateUserDto {}
 
 export interface UserSearchBody {
   id: string

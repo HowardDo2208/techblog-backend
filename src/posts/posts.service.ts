@@ -23,11 +23,15 @@ export class PostsService {
   ) {}
 
   findAll(): Promise<Post[]> {
-    return this.postRepository.find()
+    return this.postRepository.find({
+      relations: ['author', 'bookmarks', 'comments', 'likes'],
+    })
   }
 
   findOne(id: number): Promise<Post> {
-    return this.postRepository.findOne(id)
+    return this.postRepository.findOne(id, {
+      relations: ['author', 'bookmarks', 'comments', 'likes'],
+    })
   }
 
   async create(post: CreatePostDto): Promise<Post> {
@@ -51,7 +55,7 @@ export class PostsService {
       body,
       tags: JSON.parse(tags),
       image: uploadedImage.url,
-      publishedAt: new Date(),
+      date: new Date(),
       author,
     })
     const result = await this.postRepository.save(newPost)

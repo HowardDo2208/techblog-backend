@@ -15,9 +15,7 @@ export default class PostsSearchService {
       index: this.index,
       document: {
         ...rest,
-        author: author
-          ? `${author.firstName} ${author.lastName} ${author.email}`
-          : '',
+        author,
         tags,
         body,
         parent: parent ? parent.title : '',

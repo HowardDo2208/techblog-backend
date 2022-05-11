@@ -10,6 +10,7 @@ import {
   UpdateUserDto,
   UserSearchBody,
 } from './entities/user.types'
+import { DEFAULT_AVATAR } from 'src/constants/constants'
 
 @Injectable()
 export class UsersService {
@@ -24,22 +25,30 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    const res = await this.userRepository.findOne(id)
+    const res = await this.userRepository.findOne(id, {
+      relations: ['posts', 'posts.author', 'posts.comments', 'comments'],
+    })
+
     return res
   }
 
   async create(user: CreateUserDto): Promise<User> {
     const newUser = await this.userRepository.create({
       ...user,
+      avatar: DEFAULT_AVATAR,
       registeredAt: new Date(),
     })
     const result = await this.userRepository.save(newUser)
-    await this.userSearchService.indexUser(result)
+    await this.userSearchService.indexNewUser(result)
     return result
   }
 
-  update(id: string, user: UpdateUserDto): Promise<UpdateResult> {
-    const result = this.userRepository.update(id, user)
+  async update(
+    id: string,
+    patch: Partial<Omit<User, 'email' | 'id'>>,
+  ): Promise<UpdateResult> {
+    console.log('update user', id, patch)
+    const result = await this.userRepository.update(id, patch)
     //update elasticsearch document
     return result
   }

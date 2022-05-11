@@ -30,17 +30,7 @@ export class Post {
   @Column({
     nullable: true,
   })
-  public metaTitle: string
-
-  @Column({
-    nullable: true,
-  })
   public slug: string
-
-  @Column({
-    nullable: true,
-  })
-  public summary: string
 
   @Column()
   public published: boolean
@@ -48,7 +38,7 @@ export class Post {
   @Column('timestamp', {
     nullable: true,
   })
-  public publishedAt: Date
+  public date: Date
 
   @Column()
   public body: string
@@ -61,4 +51,13 @@ export class Post {
 
   @OneToMany(() => PostComment, (comment) => comment.post)
   public comments: PostComment[]
+
+  @Column('text', { default: [], array: true })
+  public bookmarks: string[]
+
+  @Column('text', { default: [], array: true })
+  public likes: string[]
+
+  @Column('text', { default: [], array: true })
+  public unicorns: string[]
 }

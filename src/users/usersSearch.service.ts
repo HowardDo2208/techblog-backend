@@ -11,8 +11,8 @@ export default class UsersSearchService {
 
   constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
-  async indexUser(user: User) {
-    const { id, firstName, lastName, email, mobile, intro } = user
+  async indexNewUser(user: User) {
+    const { id, email } = user
     return this.elasticsearchService.index<UserSearchBody>({
       index: this.index,
       document: {

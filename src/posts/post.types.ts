@@ -1,3 +1,5 @@
+import { User } from 'supertokens-node/recipe/thirdpartyemailpassword'
+
 export class CreatePostDto {
   parentId?: number
   title: string
@@ -19,12 +21,10 @@ export class UpdatePostDto {
 export interface PostSearchBody {
   id: number
   title: string
-  metaTitle: string
   slug: string
-  summary: string
   tags: string[]
   body: string
-  author: string
+  author: any
   parent?: string
   published: boolean
 }
