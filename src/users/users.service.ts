@@ -11,6 +11,7 @@ import {
   UserSearchBody,
 } from './entities/user.types'
 import { DEFAULT_AVATAR } from 'src/constants/constants'
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service'
 
 @Injectable()
 export class UsersService {
@@ -18,6 +19,7 @@ export class UsersService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @Inject(UsersSearchService)
     private readonly userSearchService: UsersSearchService,
+    private cloudinaryService: CloudinaryService,
   ) {}
 
   findAll(): Promise<User[]> {
@@ -46,11 +48,16 @@ export class UsersService {
   async update(
     id: string,
     patch: Partial<Omit<User, 'email' | 'id'>>,
-  ): Promise<UpdateResult> {
-    console.log('update user', id, patch)
-    const result = await this.userRepository.update(id, patch)
+    avatar?: any,
+  ): Promise<User> {
+    if (avatar) {
+      const uploadRes = await this.cloudinaryService.uploadImage(avatar)
+      patch.avatar = uploadRes.url
+    }
+    const result = await this.userRepository.update(id, { ...patch })
+    const updatedUser = await this.userRepository.findOne(id)
     //update elasticsearch document
-    return result
+    return updatedUser
   }
 
   delete(id: string): Promise<DeleteResult> {

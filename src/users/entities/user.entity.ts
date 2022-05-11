@@ -98,4 +98,7 @@ export class User {
 
   @Column('int', { default: [], array: true })
   public following: string[]
+
+  @Column({ nullable: true })
+  public skills: string
 }

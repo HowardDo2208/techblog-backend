@@ -24,13 +24,13 @@ export class PostsService {
 
   findAll(): Promise<Post[]> {
     return this.postRepository.find({
-      relations: ['author', 'bookmarks', 'comments', 'likes'],
+      relations: ['author', 'comments'],
     })
   }
 
   findOne(id: number): Promise<Post> {
     return this.postRepository.findOne(id, {
-      relations: ['author', 'bookmarks', 'comments', 'likes'],
+      relations: ['author', 'comments'],
     })
   }
 

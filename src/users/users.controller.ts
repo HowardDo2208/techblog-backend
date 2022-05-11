@@ -6,7 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { AuthGuard } from 'src/auth/auth.guard'
+import { DEFAULT_AVATAR } from 'src/constants/constants'
 
 //import { CreateUserDto } from './dto/create-user.dto';
 //import { UpdateUserDto } from './dto/update-user.dto';
@@ -35,8 +41,14 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: any) {
-    return this.usersService.update(id, updateUserDto)
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('avatar'))
+  update(
+    @Param('id') id: string,
+    @UploadedFile() avatar,
+    @Body() updateUserDto: any,
+  ) {
+    return this.usersService.update(id, updateUserDto, avatar)
   }
 
   @Delete(':id')
