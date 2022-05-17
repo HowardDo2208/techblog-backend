@@ -14,16 +14,18 @@ export class PostComment {
   public id: number
 
   @ManyToOne(() => User, (user) => user.comments)
-  public commenter: User
+  public author: User
 
   @ManyToOne(() => Post, (post) => post.comments)
-  public post: Post
+  public parentPost: Post
 
-  @ManyToOne(() => PostComment, (comment) => comment.childComments)
-  public parent: Post
+  @ManyToOne(() => PostComment, (comment) => comment.childrenComments, {
+    onDelete: 'CASCADE',
+  })
+  public parentComment: PostComment
 
   @Column()
-  public content: string
+  public body: string
 
   @Column()
   public published: boolean
@@ -31,6 +33,6 @@ export class PostComment {
   @Column()
   public publishedAt: Date
 
-  @OneToMany(() => PostComment, (comment) => comment.parent)
-  public childComments: PostComment[]
+  @OneToMany(() => PostComment, (comment) => comment.parentComment)
+  public childrenComments: PostComment[]
 }

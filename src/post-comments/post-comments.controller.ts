@@ -16,8 +16,8 @@ export class PostCommentsController {
   constructor(private readonly postCommentsService: PostCommentsService) {}
 
   @Post()
-  create(@Body() createPostCommentDto: CreatePostCommentDto) {
-    return this.postCommentsService.create(createPostCommentDto)
+  async create(@Body() createPostCommentDto: CreatePostCommentDto) {
+    return await this.postCommentsService.create(createPostCommentDto)
   }
 
   @Get()

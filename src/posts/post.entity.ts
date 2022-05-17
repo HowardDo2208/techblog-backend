@@ -49,7 +49,7 @@ export class Post {
   @Column({ nullable: true })
   public image: string
 
-  @OneToMany(() => PostComment, (comment) => comment.post)
+  @OneToMany(() => PostComment, (comment) => comment.parentPost)
   public comments: PostComment[]
 
   @Column('text', { default: [], array: true })
