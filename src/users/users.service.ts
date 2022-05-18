@@ -77,4 +77,15 @@ export class UsersService {
     const result = await this.userRepository.save(user)
     return result
   }
+
+  async follow(userId: string, userToFollowId: string) {
+    const user = await this.userRepository.findOne(userId)
+    console.log('user', user)
+    user.following.push(userToFollowId)
+    await this.userRepository.save(user)
+
+    const userToFollow = await this.userRepository.findOne(userToFollowId)
+    userToFollow.followers.push(userId)
+    await this.userRepository.save(userToFollow)
+  }
 }

@@ -93,10 +93,10 @@ export class User {
   @Column('int', { default: [], array: true })
   public unicornPosts: number[]
 
-  @Column('int', { default: [], array: true })
+  @Column('text', { default: [], array: true })
   public followers: string[]
 
-  @Column('int', { default: [], array: true })
+  @Column('text', { default: [], array: true })
   public following: string[]
 
   @Column({ nullable: true })

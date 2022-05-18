@@ -49,6 +49,24 @@ export class SupertokensService {
                   }
                   return result
                 },
+                emailPasswordSignUp: async function (input) {
+                  const result =
+                    await originalImplementation.emailPasswordSignUp(input)
+                  if (result.status === 'OK') {
+                    //create on database
+                    const { id, email } = result.user
+                    const postgresUser = await usersService.create({
+                      id,
+                      email,
+                    })
+                    console.log('postgresUser', postgresUser)
+                    if (!postgresUser) {
+                      await deleteUser(result.user.id)
+                      throw new Error('Failed to create user in postgres')
+                    }
+                  }
+                  return result
+                },
                 // ...
                 // TODO: override more functions
               }

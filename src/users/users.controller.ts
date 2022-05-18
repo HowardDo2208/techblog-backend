@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  Put,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { AuthGuard } from 'src/auth/auth.guard'
@@ -54,5 +55,13 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.delete(id)
+  }
+
+  @Put('follow')
+  @UseGuards(AuthGuard)
+  async follow(
+    @Body() { userId, followId }: { userId: string; followId: string },
+  ) {
+    return await this.usersService.follow(userId, followId)
   }
 }
