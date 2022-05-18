@@ -20,7 +20,8 @@ export class PostsService {
     @Inject(PostsSearchService)
     private readonly postSearchService: PostsSearchService,
     private cloudinary: CloudinaryService,
-    private usersService: UsersService,
+    @Inject(forwardRef(() => UsersService))
+    private readonly usersService: UsersService,
   ) {}
 
   findAll(): Promise<Post[]> {
@@ -101,5 +102,11 @@ export class PostsService {
     post.bookmarks.push(userId)
     await this.usersService.addToReadingList(userId, id)
     await this.postRepository.save(post)
+  }
+
+  async findByIds(ids: number[]): Promise<Post[]> {
+    return await this.postRepository.findByIds(ids, {
+      relations: ['author', 'comments'],
+    })
   }
 }

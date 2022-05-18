@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 // import { CreateUserDto } from './dto/create-user.dto';
@@ -12,6 +12,8 @@ import {
 } from './entities/user.types'
 import { DEFAULT_AVATAR } from 'src/constants/constants'
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service'
+import { PostsService } from 'src/posts/posts.service'
+import { Post } from 'src/posts/post.entity'
 
 @Injectable()
 export class UsersService {
@@ -20,6 +22,8 @@ export class UsersService {
     @Inject(UsersSearchService)
     private readonly userSearchService: UsersSearchService,
     private cloudinaryService: CloudinaryService,
+    @Inject(forwardRef(() => PostsService))
+    private postService: PostsService,
   ) {}
 
   findAll(): Promise<User[]> {
@@ -87,5 +91,26 @@ export class UsersService {
     const userToFollow = await this.userRepository.findOne(userToFollowId)
     userToFollow.followers.push(userId)
     await this.userRepository.save(userToFollow)
+  }
+
+  async unfollow(userId: string, userToUnfollowId: string) {
+    const user = await this.userRepository.findOne(userId)
+    user.following = user.following.filter(
+      (id: string) => id !== userToUnfollowId,
+    )
+    await this.userRepository.save(user)
+
+    const userToUnfollow = await this.userRepository.findOne(userToUnfollowId)
+    userToUnfollow.followers = userToUnfollow.followers.filter(
+      (id: string) => id !== userId,
+    )
+    await this.userRepository.save(userToUnfollow)
+  }
+
+  async getReadingList(userId: string): Promise<Post[]> {
+    const user = await this.userRepository.findOne(userId)
+    const { readingList } = user
+    const posts = await this.postService.findByIds(readingList)
+    return posts
   }
 }

@@ -64,4 +64,18 @@ export class UsersController {
   ) {
     return await this.usersService.follow(userId, followId)
   }
+
+  @Put('unfollow')
+  @UseGuards(AuthGuard)
+  async unfollow(
+    @Body() { userId, followId }: { userId: string; followId: string },
+  ) {
+    return await this.usersService.unfollow(userId, followId)
+  }
+
+  @Get(':id/bookmarks')
+  @UseGuards(AuthGuard)
+  async getBookmarks(@Param('id') id: string) {
+    return await this.usersService.getReadingList(id)
+  }
 }
