@@ -70,4 +70,11 @@ export class UsersService {
     const result = await this.userSearchService.searchUser(text)
     return result
   }
+
+  async addToReadingList(userId: string, postId: number): Promise<User> {
+    const user = await this.userRepository.findOne(userId)
+    user.readingList.push(postId)
+    const result = await this.userRepository.save(user)
+    return result
+  }
 }

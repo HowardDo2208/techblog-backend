@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service'
+import { User } from 'src/users/entities/user.entity'
 import { UsersService } from 'src/users/users.service'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { Post } from './post.entity'
@@ -93,5 +94,12 @@ export class PostsService {
     post.likes = post.likes.filter((like) => like !== userId)
     const result = await this.postRepository.save(post)
     return result
+  }
+
+  async bookmark(id: number, userId: string) {
+    const post = await this.postRepository.findOne(id)
+    post.bookmarks.push(userId)
+    await this.usersService.addToReadingList(userId, id)
+    await this.postRepository.save(post)
   }
 }

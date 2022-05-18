@@ -1,13 +1,19 @@
 import { Injectable } from '@nestjs/common'
 import { ElasticsearchService } from '@nestjs/elasticsearch'
+import { InjectRepository } from '@nestjs/typeorm'
+import { In, Repository } from 'typeorm'
 import { Post } from './post.entity'
 import { PostSearchBody } from './post.types'
+import { PostsService } from './posts.service'
 
 @Injectable()
 export default class PostsSearchService {
   index = 'posts'
 
-  constructor(private readonly elasticsearchService: ElasticsearchService) {}
+  constructor(
+    private readonly elasticsearchService: ElasticsearchService,
+    @InjectRepository(Post) private postRepository: Repository<Post>,
+  ) {}
 
   async indexPost(post: Post) {
     const { author, tags, parent, body, ...rest } = post
@@ -15,7 +21,7 @@ export default class PostsSearchService {
       index: this.index,
       document: {
         ...rest,
-        author,
+        author: `${author.email} ${author.name}`,
         tags,
         body,
         parent: parent ? parent.title : '',
@@ -44,7 +50,12 @@ export default class PostsSearchService {
         },
       },
     })
-    return hits.hits.map((item) => item._source)
+    const postIds = hits.hits.map((item) => item._source.id)
+    console.log('postIds', postIds)
+    return await this.postRepository.find({
+      where: { id: In(postIds) },
+      relations: ['author', 'comments'],
+    })
   }
 
   async deleteAllDocs() {

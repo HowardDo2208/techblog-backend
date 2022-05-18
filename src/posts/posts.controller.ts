@@ -85,4 +85,14 @@ export class PostsController {
     const userId = session.getUserId()
     await this.postsService.unlike(id, userId)
   }
+
+  @Put(':id/bookmark')
+  @UseGuards(AuthGuard)
+  async bookmark(
+    @Param('id') id: number,
+    @Session() session: SessionContainer,
+  ) {
+    const userId = session.getUserId()
+    await this.postsService.bookmark(id, userId)
+  }
 }
