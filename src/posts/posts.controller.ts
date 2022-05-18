@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
   Session,
   UploadedFile,
@@ -69,5 +70,19 @@ export class PostsController {
   @Delete(':id')
   remove(@Param('id') id: number) {
     return this.postsService.delete(id)
+  }
+
+  @Put(':id/like')
+  @UseGuards(AuthGuard)
+  async like(@Param('id') id: number, @Session() session: SessionContainer) {
+    const userId = session.getUserId()
+    await this.postsService.like(id, userId)
+  }
+
+  @Put(':id/unlike')
+  @UseGuards(AuthGuard)
+  async unlike(@Param('id') id: number, @Session() session: SessionContainer) {
+    const userId = session.getUserId()
+    await this.postsService.unlike(id, userId)
   }
 }

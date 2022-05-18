@@ -74,4 +74,24 @@ export class PostsService {
   deleteAll(): Promise<DeleteResult> {
     return this.postRepository.delete({})
   }
+
+  async like(id: number, userId: string): Promise<Post> {
+    const post = await this.findOne(id)
+    if (post.likes.includes(userId)) {
+      throw new BadRequestException('You already liked this post')
+    }
+    post.likes.push(userId)
+    const result = await this.postRepository.save(post)
+    return result
+  }
+
+  async unlike(id: number, userId: string): Promise<Post> {
+    const post = await this.findOne(id)
+    if (!post.likes.includes(userId)) {
+      throw new BadRequestException('You already unliked this post')
+    }
+    post.likes = post.likes.filter((like) => like !== userId)
+    const result = await this.postRepository.save(post)
+    return result
+  }
 }
