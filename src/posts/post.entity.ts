@@ -49,7 +49,9 @@ export class Post {
   @Column({ nullable: true })
   public image: string
 
-  @OneToMany(() => PostComment, (comment) => comment.parentPost)
+  @OneToMany(() => PostComment, (comment) => comment.parentPost, {
+    onDelete: 'CASCADE',
+  })
   public comments: PostComment[]
 
   @Column('text', { default: [], array: true })

@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service'
+import { TagsService } from 'src/tags/tags.service'
 import { User } from 'src/users/entities/user.entity'
 import { UsersService } from 'src/users/users.service'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
@@ -22,6 +23,8 @@ export class PostsService {
     private cloudinary: CloudinaryService,
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
+    @Inject(TagsService)
+    private readonly tagsService: TagsService,
   ) {}
 
   findAll(): Promise<Post[]> {
@@ -48,6 +51,7 @@ export class PostsService {
     } = post
     const uploadedImage = await this.cloudinary.uploadImage(image)
     const author = await this.usersService.findOne(userId)
+    const parsedTags = JSON.parse(tags)
 
     const newPost = this.postRepository.create({
       parent: parentId ? await this.postRepository.findOne(parentId) : null,
@@ -61,6 +65,7 @@ export class PostsService {
       author,
     })
     const result = await this.postRepository.save(newPost)
+    await this.tagsService.create(parsedTags)
     this.postSearchService.indexPost(result)
     return result
   }
@@ -69,12 +74,15 @@ export class PostsService {
     return this.postRepository.update(id, post)
   }
 
-  delete(id: number): Promise<DeleteResult> {
-    return this.postRepository.delete(id)
+  async delete(id: number) {
+    await this.postRepository.delete(id)
+    await this.postSearchService.deleteDoc(id)
   }
 
-  deleteAll(): Promise<DeleteResult> {
-    return this.postRepository.delete({})
+  async deleteAll() {
+    await this.postSearchService.deleteAllDocs()
+    console.log('deleted all docs')
+    await this.postRepository.delete({})
   }
 
   async like(id: number, userId: string): Promise<Post> {
@@ -106,6 +114,13 @@ export class PostsService {
 
   async findByIds(ids: number[]): Promise<Post[]> {
     return await this.postRepository.findByIds(ids, {
+      relations: ['author', 'comments'],
+    })
+  }
+
+  async findPostsWithTagName(tag: string): Promise<Post[]> {
+    return this.postRepository.find({
+      where: { tags: [tag] },
       relations: ['author', 'comments'],
     })
   }

@@ -37,7 +37,7 @@ export default class PostsSearchService {
           multi_match: {
             query: text,
             fields: [
-              'title',
+              'title^5',
               'metaTitle',
               'slug',
               'summary',
@@ -55,6 +55,19 @@ export default class PostsSearchService {
     return await this.postRepository.find({
       where: { id: In(postIds) },
       relations: ['author', 'comments'],
+    })
+  }
+
+  async deleteDoc(id: number) {
+    return this.elasticsearchService.deleteByQuery({
+      index: this.index,
+      body: {
+        query: {
+          match: {
+            id,
+          },
+        },
+      },
     })
   }
 

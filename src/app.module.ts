@@ -9,7 +9,7 @@ import { UsersModule } from './users/users.module'
 import { PostCommentsModule } from './post-comments/post-comments.module'
 import { AuthModule } from './auth/auth.module'
 import { CloudinaryModule } from './cloudinary/cloudinary.module'
-import { NestjsFormDataModule } from 'nestjs-form-data'
+import { TagsModule } from './tags/tags.module'
 
 const ENV = process.env.NODE_ENV
 @Module({
@@ -26,6 +26,7 @@ const ENV = process.env.NODE_ENV
     PostCommentsModule,
     AuthModule,
     CloudinaryModule,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

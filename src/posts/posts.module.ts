@@ -9,6 +9,8 @@ import { CloudinaryModule } from 'src/cloudinary/cloudinary.module'
 import { UsersModule } from 'src/users/users.module'
 import { UsersService } from 'src/users/users.service'
 import UsersSearchService from 'src/users/usersSearch.service'
+import { TagsModule } from 'src/tags/tags.module'
+import { TagsService } from 'src/tags/tags.service'
 
 @Module({
   imports: [
@@ -16,6 +18,7 @@ import UsersSearchService from 'src/users/usersSearch.service'
     SearchModule,
     CloudinaryModule,
     UsersModule,
+    TagsModule,
   ],
   exports: [TypeOrmModule, PostsService],
   controllers: [PostsController],
